@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
 
     private int score = 0;
     private int bestScore = 0;
+    private string playerName = "";
+    private string bestScoreName = "";
     private bool isNewBestScore = false;
 
     private void OnEnable()
@@ -31,7 +33,10 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isNewBestScore = false;
         bestScore = MainManager.Instance.bestScore;
+        playerName = MainManager.Instance.playerName;
+        bestScoreName = MainManager.Instance.bestScoreName;
         UpdateScoreText(0);
         UpdateBestScoreText(MainManager.Instance.bestScore);
     }
@@ -45,9 +50,10 @@ public class UIManager : MonoBehaviour
     private void UpdateScoreText(int points)
     {
         score += points;
-        ScoreText.text = $"Score : {score}";
+        ScoreText.text = $"Score : {playerName} {score}";
         if(score > bestScore)
         {
+            Debug.Log("Updating best score! Congrats.");
             UpdateBestScoreText(score);
         }
     }
@@ -55,14 +61,20 @@ public class UIManager : MonoBehaviour
     private void UpdateBestScoreText(int score)
     {
         bestScore = score;
-        isNewBestScore = true;
-        BestScoreText.text = $"Best Score : {score}";
+
+        if (this.score == score) {
+            isNewBestScore = true;
+            bestScoreName = playerName;
+        }
+
+        BestScoreText.text = $"Best Score: {bestScoreName} {score}";
     }
 
     private void UpdateGameOverText()
     {
         if (isNewBestScore)
         {
+            Debug.Log("Game Over! But new highscore!");
             MainManager.Instance.UpdateBestScore(score);
         }
         GameOverText.SetActive(true);

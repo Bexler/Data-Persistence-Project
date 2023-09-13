@@ -10,17 +10,34 @@ public class MenuUIManager : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI bestScoreText;
+    [SerializeField] private TMP_InputField nameInput;
 
     // Start is called before the first frame update
     void Start()
     {
-        bestScoreText.text = "Best Score: " + MainManager.Instance.bestScore;
+        UpdateHighscore();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void UpdateHighscore()
+    {
+        bestScoreText.text = "Best Score: " + MainManager.Instance.bestScoreName + " " + MainManager.Instance.bestScore;
+    }
+
+    public void ResetHighscore()
+    {
+        MainManager.Instance.ResetBestScore();
+        UpdateHighscore();
+    }
+
+    public void UpdatePlayerName()
+    {
+        MainManager.Instance.playerName = nameInput.text;
     }
 
     public void Exit()

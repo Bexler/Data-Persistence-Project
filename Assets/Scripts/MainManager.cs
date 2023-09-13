@@ -13,6 +13,10 @@ public class MainManager : MonoBehaviour
 
     public int bestScore;
 
+    public string bestScoreName;
+
+    public string playerName;
+
     private void Awake()
     {
         if(Instance != null)
@@ -53,9 +57,16 @@ public class MainManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void ResetBestScore()
+    {
+        playerName = "";
+        UpdateBestScore(0);
+    }
+
     public void UpdateBestScore(int score)
     {
         bestScore = score;
+        bestScoreName = playerName;
         saveScore();
     }
 
@@ -63,12 +74,14 @@ public class MainManager : MonoBehaviour
     class SaveData
     {
         public int savedScore;
+        public string savedName;
     }
 
     public void saveScore()
     {
         SaveData data = new SaveData();
         data.savedScore = bestScore;
+        data.savedName = bestScoreName;
 
         string json = JsonUtility.ToJson(data);
 
@@ -86,10 +99,12 @@ public class MainManager : MonoBehaviour
 
             Debug.Log("Received savedScore: " + data.savedScore);
             bestScore = data.savedScore; 
+            bestScoreName = data.savedName;
         } else
         {
             Debug.Log("Failed to receive savedScore, path not found");
             bestScore = 0;
+            bestScoreName = "NoName";
         }
     }
 }
